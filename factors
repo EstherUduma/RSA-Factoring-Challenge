@@ -1,27 +1,30 @@
 #!/usr/bin/env python3
-""" Factor numbers """
-from sys import argv
-from math import sqrt
+"""Factor numbers """
+import sys
 
+def read_numbers_from_file(file_name):
+	"""Read numbers from file and return a list"""
+	with open(file_name, "r", encodeing="utf-8") as file:
+		lines = file.readlines()
+	numbers_to_factor = [int(line) for line in lines]
+	return numbers_to_factor
 
-def factorize(n):
-	sqrt_n = int(n**0.5)
-	for candidate in range(2, sqrt_n + 1):
-		if n % candidate == 0:
-			return candidate, n // candidate
-		return n, 1
+def factorize_number(n):
+	"""Factorize a given number and print the result"""
+	for factor in range(1, n):
+		if n == (n // factor) * factor:
+			print("{}={}*{}".format(n, (n // factor), factor))
+			break
 
-def main(filename):
-	with open(filename, 'r') as file:
-		for line in file:
-			num = int(line.strip())
-			factor1, factor2 = factorize(num)
-			print(f"{num}={factor1}*{factor2}")
+def factorize_list(numbers):
+	"""Factorize each number in the given list"""
+	for num in numbers:
+		factorize_number(num)
 
 if __name__ == "__main__":
-	if len(sys.argv) != 2:
-		print("Usage: factors <file>")
+	if len(sys.argv) == 2:
+		numbers_to_factorize = read_numbers_from_file(sys.argv[1])
+		factorize_list(numbers_to_factorize)
+	else:
+		print("Usage: {} <file>".format(sys.argv[0]))
 		sys.exit(1)
-
-	filename = sys.argv[1]
-	main(filename)
